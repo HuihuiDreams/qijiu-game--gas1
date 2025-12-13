@@ -1,0 +1,5 @@
+{
+  "name": "Nova Visual Novel Engine",
+  "description": "A modern, web-based Visual Novel engine featuring save/load states, history log, and a flexible script system.",
+  "requestFramePermissions": []
+}
