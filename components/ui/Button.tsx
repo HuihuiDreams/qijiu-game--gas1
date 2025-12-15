@@ -11,8 +11,8 @@ export const Button: React.FC<ButtonProps> = ({ variant = 'primary', className =
   const variants = {
     // Ink & Jade style
     primary: "bg-stone-900/80 hover:bg-emerald-900/50 text-emerald-100 border-stone-600 hover:border-emerald-500/50 shadow-[0_0_15px_rgba(0,0,0,0.5)] backdrop-blur-sm",
-    // Paper style
-    secondary: "bg-stone-800/50 hover:bg-stone-700/50 text-stone-200 border-stone-700 hover:border-stone-500",
+    // Paper style - Made more opaque for better visibility
+    secondary: "bg-stone-900/90 hover:bg-stone-800/90 text-stone-200 border-stone-600 hover:border-stone-400 shadow-md backdrop-blur-md",
     // Transparent
     ghost: "bg-transparent hover:bg-white/5 text-stone-400 hover:text-stone-200 border-transparent"
   };

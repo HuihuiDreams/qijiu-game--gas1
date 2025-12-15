@@ -33,6 +33,8 @@ export interface DialogueLine {
   setFlag?: { key: string; value: any }; // Set a variable when this line is reached
   bgImage?: string; // Change background
   characterUpdates?: CharacterState[]; // Enter/Exit/Move characters
+  bgm?: string; // URL to background music file
+  soundEffect?: string; // URL to sound effect file
 }
 
 export interface StoryScene {
@@ -46,6 +48,7 @@ export interface GameSaveState {
   flags: Record<string, any>;
   timestamp: number;
   screenshot?: string; // Optional placeholder for save UI
+  currentBgm?: string; // Save the currently playing BGM
 }
 
 export interface LogEntry {

@@ -27,13 +27,17 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
   const [history, setHistory] = useState<LogEntry[]>([]);
   const [showHistory, setShowHistory] = useState(false);
   const [isAutoSaving, setIsAutoSaving] = useState(false);
-  
+
+  // Audio State
+  const [currentBgm, setCurrentBgm] = useState<string | undefined>(initialState?.currentBgm);
+
   // Refs
-  const gameStateRef = useRef({ sceneId, lineIndex, flags });
+  const gameStateRef = useRef({ sceneId, lineIndex, flags, currentBgm });
+  const bgmRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    gameStateRef.current = { sceneId, lineIndex, flags };
-  }, [sceneId, lineIndex, flags]);
+    gameStateRef.current = { sceneId, lineIndex, flags, currentBgm };
+  }, [sceneId, lineIndex, flags, currentBgm]);
   
   // Derived
   const currentScene = STORY_SCENES[sceneId];
@@ -47,6 +51,7 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
         currentSceneId: gameStateRef.current.sceneId,
         currentLineIndex: gameStateRef.current.lineIndex,
         flags: gameStateRef.current.flags,
+        currentBgm: gameStateRef.current.currentBgm,
         timestamp: Date.now()
       };
       onAutoSave(stateToSave);
@@ -65,14 +70,64 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
   }, [sceneId, triggerAutoSave]);
 
 
-  // --- Effects ---
+  // --- Audio Logic ---
+  useEffect(() => {
+    // Initialize Audio Element
+    if (!bgmRef.current) {
+        bgmRef.current = new Audio();
+        bgmRef.current.loop = true;
+        bgmRef.current.volume = 0.5; // Default volume
+    }
+
+    // Attempt to resume BGM if loading from save and no audio is playing
+    if (currentBgm && bgmRef.current.paused && bgmRef.current.src === '') {
+         bgmRef.current.src = currentBgm;
+         bgmRef.current.play().catch(e => console.warn("Auto-play blocked or file missing:", e));
+    }
+
+    return () => {
+        // Cleanup on unmount
+        if (bgmRef.current) {
+            bgmRef.current.pause();
+            bgmRef.current = null;
+        }
+    };
+  }, []); // Run once on mount
+
+  useEffect(() => {
+    if (!currentLine) return;
+
+    // 1. Handle Sound Effects (One-shot)
+    if (currentLine.soundEffect) {
+        const sfx = new Audio(currentLine.soundEffect);
+        sfx.volume = 0.7;
+        sfx.play().catch(e => console.warn("SFX failed:", currentLine.soundEffect, e));
+    }
+
+    // 2. Handle Background Music
+    if (currentLine.bgm && currentLine.bgm !== currentBgm) {
+        if (bgmRef.current) {
+            // Fade out logic could go here, but doing hard switch for responsiveness
+            bgmRef.current.src = currentLine.bgm;
+            bgmRef.current.play().catch(e => console.warn("BGM failed:", currentLine.bgm, e));
+            setCurrentBgm(currentLine.bgm);
+        }
+    }
+  }, [currentLine, currentBgm]);
+
+
+  // --- Visual Effects & Scene Logic ---
   useEffect(() => {
     if (!currentLine) return;
 
     if (currentLine.bgImage && currentLine.bgImage !== bgImage) {
-      setBgImage(currentLine.bgImage);
-      setBgLoadError(false); // Reset error state for new image
+         setBgImage(currentLine.bgImage);
+         setBgLoadError(false);
     }
+  }, [currentLine]); 
+
+  useEffect(() => {
+    if (!currentLine) return;
 
     if (currentLine.characterUpdates) {
       setActiveCharacters(prev => {
@@ -122,6 +177,7 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
       addToHistory();
       setLineIndex(nextIndex);
     } else {
+      // End of scene and no jump/choices -> Exit to Main Menu
       onExit(); 
     }
   }, [currentLine, isTyping, lineIndex, currentScene]);
@@ -149,18 +205,20 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
       currentSceneId: sceneId,
       currentLineIndex: lineIndex,
       flags,
+      currentBgm,
       timestamp: Date.now()
     });
-    alert("Game Saved!");
+    alert("存档成功！");
   };
 
   if (!currentLine) return <div className="text-center mt-20 text-white">Loading...</div>;
 
   const speaker = currentLine.speakerId ? CHARACTERS[currentLine.speakerId] : undefined;
   const showChoices = !isTyping && currentLine.choices && currentLine.choices.length > 0;
+  const isInteracting = showChoices || showHistory;
 
   return (
-    <div className="relative w-full h-screen bg-stone-900 overflow-hidden select-none">
+    <div className="relative w-full h-screen bg-stone-950 overflow-hidden select-none">
       
       {/* Background Layer */}
       {bgImage && !bgLoadError ? (
@@ -168,7 +226,7 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
            src={bgImage}
            alt="Background"
            className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out"
-           style={{ filter: showHistory ? 'blur(4px)' : 'none' }}
+           style={{ filter: isInteracting ? 'blur(4px)' : 'none' }}
            onError={() => setBgLoadError(true)}
          />
       ) : (
@@ -185,30 +243,32 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
       {/* UI Layer */}
       <div className="absolute inset-0 z-20 flex flex-col justify-between">
         
-        {/* Top HUD */}
-        <div className="p-4 flex justify-between items-start">
-           <div className="space-x-2 opacity-0 hover:opacity-100 transition-opacity duration-300">
-             <Button variant="secondary" onClick={() => setShowHistory(true)} className="text-sm py-1 px-3">Log</Button>
-             <Button variant="secondary" onClick={handleSave} className="text-sm py-1 px-3">Save</Button>
+        {/* Top HUD with Gradient Background for Visibility */}
+        <div className="absolute top-0 left-0 w-full p-4 flex justify-between items-start z-50 bg-gradient-to-b from-black/80 via-black/40 to-transparent pb-12 transition-all duration-300">
+           {/* Left Controls */}
+           <div className="space-x-2 flex">
+             <Button variant="secondary" onClick={() => setShowHistory(true)} className="text-sm py-1 px-3 shadow-lg">历史记录</Button>
+             <Button variant="secondary" onClick={handleSave} className="text-sm py-1 px-3 shadow-lg ring-1 ring-white/10">手动存档</Button>
            </div>
            
+           {/* Right Controls */}
            <div className="flex items-center space-x-4">
-             <div className={`transition-opacity duration-500 text-stone-400 text-xs font-serif tracking-widest ${isAutoSaving ? 'opacity-100' : 'opacity-0'}`}>
-                Saving...
+             <div className={`transition-opacity duration-500 text-stone-300 text-xs font-serif tracking-widest drop-shadow-md ${isAutoSaving ? 'opacity-100' : 'opacity-0'}`}>
+                自动保存中...
              </div>
-             <Button variant="ghost" onClick={onExit} className="text-sm py-1 px-3 opacity-0 hover:opacity-100 transition-opacity duration-300">Main Menu</Button>
+             <Button variant="ghost" onClick={onExit} className="text-sm py-1 px-3 text-stone-300 hover:text-white hover:bg-white/10 shadow-lg">返回主页</Button>
            </div>
         </div>
 
-        {/* Interaction Area */}
-        {!showChoices && !showHistory && (
+        {/* Interaction Area (Click to advance) */}
+        {!isInteracting && (
             <div className="flex-grow z-20" onClick={handleAdvance} />
         )}
 
         {/* Choices Overlay */}
         {showChoices && (
           <div className="absolute inset-0 z-40 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center space-y-4 animate-fade-in">
-             <h2 className="text-xl text-white/80 mb-6 font-bold tracking-widest uppercase">Make Your Choice</h2>
+             <h2 className="text-xl text-white/80 mb-6 font-bold tracking-widest uppercase">抉择</h2>
              {currentLine.choices?.map((choice, idx) => (
                <button
                  key={idx}
@@ -222,7 +282,7 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
         )}
 
         {/* Dialogue Box */}
-        {!showHistory && !showChoices && (
+        {!isInteracting && (
             <DialogueBox 
               text={currentLine.text} 
               speaker={speaker} 
@@ -237,8 +297,8 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
       {showHistory && (
         <div className="absolute inset-0 z-50 bg-slate-900/95 flex flex-col p-8 md:p-16">
           <div className="flex justify-between items-center mb-6 border-b border-slate-700 pb-4">
-            <h2 className="text-3xl font-bold text-slate-200">History Log</h2>
-            <Button onClick={() => setShowHistory(false)}>Close</Button>
+            <h2 className="text-3xl font-bold text-slate-200">历史记录</h2>
+            <Button onClick={() => setShowHistory(false)}>关闭</Button>
           </div>
           <div className="flex-grow overflow-y-auto space-y-4 pr-4">
             {history.map((entry, i) => (
@@ -247,7 +307,7 @@ export const GameEngine: React.FC<Props> = ({ initialState, onExit, onSave, onAu
                 <span className="text-slate-300">{entry.text}</span>
               </div>
             ))}
-            {history.length === 0 && <p className="text-slate-500 italic">No history yet.</p>}
+            {history.length === 0 && <p className="text-slate-500 italic">暂无记录</p>}
           </div>
         </div>
       )}
