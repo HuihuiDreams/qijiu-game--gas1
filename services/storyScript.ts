@@ -23,20 +23,20 @@ export const AUDIO = {
 
 export const ASSETS = {
   // 背景 (确保服务器上文件夹名为 pictures)
-  BG_QIANCAO: '/pictures/qiancao.png', 
-  BG_BAMBOO_NIGHT: '/pictures/bamboonight.png', 
-  BG_COLD_SPRING: '/pictures/coldspring.png',
-  BG_BEDROOM: '/pictures/bedroom.png', 
-  BG_RUINS: '/pictures/ruin.png', 
-  BG_CLIFF: '/pictures/cliff.png',
-  BG_BLACK: '/pictures/black.png', 
+  BG_QIANCAO: './pictures/qiancao.png', 
+  BG_BAMBOO_NIGHT: './pictures/bamboonight.png', 
+  BG_COLD_SPRING: './pictures/coldspring.png',
+  BG_BEDROOM: './pictures/bedroom.png', 
+  BG_RUINS: './pictures/ruin.png', 
+  BG_CLIFF: './pictures/cliff.png',
+  BG_BLACK: './pictures/black.png', 
   
   // 封面
-  START_SCREEN_PIC: '/pictures/start.png',
+  START_SCREEN_PIC: './pictures/start.png',
 
   // 立绘 (确保文件名与实际上传的一致)
-  SHEN_QINGQIU_PIC: '/pictures/shenqingqiu.png',
-  YUE_QINGYUAN_PIC: '/pictures/yueqingyuan.png',
+  SHEN_QINGQIU_PIC: './pictures/shenqingqiu.png',
+  YUE_QINGYUAN_PIC: './pictures/yueqingyuan.png',
   MU_QINGFANG_PIC: `${PLACEHOLDER_BASE}/450x800/14b8a6/ffffff?text=Mu+Qingfang`,
   
   // 特殊 CG
