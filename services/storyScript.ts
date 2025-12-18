@@ -1,4 +1,4 @@
-import { StoryScene, Character, CharacterPosition } from '../types';
+import { StoryScene, Character, CharacterPosition } from '../types.ts';
 
 // ==========================================
 // 资源路径配置 (Resource Configuration)

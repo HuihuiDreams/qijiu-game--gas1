@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { CharacterState, CharacterPosition } from '../types';
-import { getCharacterImage, CHARACTERS } from '../services/storyScript';
+import { CharacterState, CharacterPosition } from '../types.ts';
+import { getCharacterImage, CHARACTERS } from '../services/storyScript.ts';
 
 interface Props {
   activeCharacters: CharacterState[];

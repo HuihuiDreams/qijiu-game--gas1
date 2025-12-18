@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { GameEngine } from './components/GameEngine';
-import { Button } from './components/ui/Button';
-import { GameSaveState } from './types';
-import { STORAGE_KEY_SAVES, STORAGE_KEY_AUTOSAVE } from './constants';
-import { ASSETS } from './services/storyScript';
+import { GameEngine } from './components/GameEngine.tsx';
+import { Button } from './components/ui/Button.tsx';
+import { GameSaveState } from './types.ts';
+import { STORAGE_KEY_SAVES, STORAGE_KEY_AUTOSAVE } from './constants.ts';
+import { ASSETS } from './services/storyScript.ts';
 
 const App: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);

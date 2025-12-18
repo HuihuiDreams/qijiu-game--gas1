@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Character } from '../types';
-import { TYPEWRITER_SPEED_NORMAL } from '../constants';
+import { Character } from '../types.ts';
+import { TYPEWRITER_SPEED_NORMAL } from '../constants.ts';
 
 interface Props {
   text: string;

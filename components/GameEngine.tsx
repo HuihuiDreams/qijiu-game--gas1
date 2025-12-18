@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { STORY_SCENES, CHARACTERS } from '../services/storyScript';
-import { CharacterState, CharacterPosition, GameSaveState, LogEntry } from '../types';
-import { CharacterLayer } from './CharacterLayer';
-import { DialogueBox } from './DialogueBox';
-import { Button } from './ui/Button';
-import { AUTOSAVE_INTERVAL_MS } from '../constants';
+import { STORY_SCENES, CHARACTERS } from '../services/storyScript.ts';
+import { CharacterState, CharacterPosition, GameSaveState, LogEntry } from '../types.ts';
+import { CharacterLayer } from './CharacterLayer.tsx';
+import { DialogueBox } from './DialogueBox.tsx';
+import { Button } from './ui/Button.tsx';
+import { AUTOSAVE_INTERVAL_MS } from '../constants.ts';
 
 interface Props {
   initialState?: GameSaveState;

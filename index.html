@@ -8,7 +8,7 @@
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://netlify.app/" />
+    <meta property="og:url" content="https://huihuidreams.github.io/qijiu-game--gas1/" />
     <meta property="og:title" content="安定峰采购假药引发的惨案 | Cang Qiong Visual Novel" />
     <meta property="og:description" content="情不知所起，一往而深。" />
     <meta property="og:image" content="https://placehold.co/1200x630/1c1917/10b981?text=Cang+Qiong+Resonance" />
@@ -21,6 +21,10 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Babel Standalone -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <style>
       body {
         font-family: 'Noto Serif SC', serif;
@@ -46,19 +50,71 @@
       .text-shadow {
         text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
       }
+      
+      /* Loading animation */
+      .loading-spinner {
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border-left-color: #10b981;
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
     </style>
   <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
-    "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
 </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+    <div id="root" class="w-screen h-screen flex flex-col items-center justify-center space-y-4">
+      <!-- Loading State / Fallback -->
+      <div class="loading-spinner"></div>
+      <p class="text-stone-500 text-sm tracking-widest animate-pulse">正在加载资源...</p>
+      
+      <!-- Error Display Area -->
+      <div id="error-display" class="hidden text-red-400 text-xs max-w-lg text-center p-4 bg-red-900/20 border border-red-900 rounded mt-4"></div>
+    </div>
+
+    <!-- Error Handler Script -->
+    <script>
+      window.addEventListener('error', function(event) {
+        const errorDisplay = document.getElementById('error-display');
+        const spinner = document.querySelector('.loading-spinner');
+        if (errorDisplay) {
+          errorDisplay.classList.remove('hidden');
+          errorDisplay.innerHTML = '<strong>加载错误:</strong><br>' + (event.message || '未知错误');
+          if (spinner) spinner.style.display = 'none';
+        }
+      });
+      
+      // Handle 404 on scripts
+      window.addEventListener('load', function() {
+        setTimeout(function() {
+          // If React hasn't mounted after 3 seconds, show warning
+          const root = document.getElementById('root');
+          if (root && root.querySelector('.loading-spinner')) {
+             const errorDisplay = document.getElementById('error-display');
+             errorDisplay.classList.remove('hidden');
+             errorDisplay.innerHTML += '<br><br>如果是 404 错误，请检查文件名大小写或路径。<br>当前尝试加载: index.tsx';
+          }
+        }, 5000);
+      });
+    </script>
+
+    <!-- App Entry Point: Removed ./ and added cache buster -->
+    <script type="text/babel" data-type="module" data-presets="typescript,react" src="index.tsx?v=1.2"></script>
   </body>
 </html>
