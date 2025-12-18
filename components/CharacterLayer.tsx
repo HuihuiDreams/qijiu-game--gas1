@@ -20,6 +20,9 @@ export const CharacterLayer: React.FC<Props> = ({ activeCharacters }) => {
   };
 
   const handleImageError = (url: string) => {
+    // Debug logging to help identify why images are missing
+    console.error(`[CharacterLayer] Failed to load image at: ${url}`);
+    
     if (!failedUrls[url]) {
       setFailedUrls(prev => ({ ...prev, [url]: true }));
     }

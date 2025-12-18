@@ -6,23 +6,41 @@ import { StoryScene, Character, CharacterPosition } from '../types';
 
 const PLACEHOLDER_BASE = 'https://placehold.co';
 
-// 音频资源
+/**
+ * ！！！最终配置指南 ！！！
+ * 
+ * 1. 文件物理位置 (File Location):
+ *    请将图片和音频文件夹放在项目根目录下的 'public' 文件夹内。
+ *    Project Root
+ *    ├── index.html
+ *    └── public/
+ *        ├── pictures/  <-- 图片放在这里
+ *        │   ├── start.png
+ *        │   └── ...
+ *        └── audio/     <-- 音频放在这里
+ * 
+ * 2. 代码路径 (Code Path):
+ *    Web 服务器会将 public 文件夹的内容发布到根目录。
+ *    所以路径里【不需要】写 public，也不需要写开头的斜杠 /。
+ *    例如: 物理文件是 public/pictures/start.png -> 代码写 'pictures/start.png'
+ */
+
 export const AUDIO = {
   // BGM
-  BGM_GUQIN: '/audio/bgm_guqin.mp3',       
-  BGM_HEARTBEAT: '/audio/bgm_heartbeat.mp3', 
-  BGM_EPIC: '/audio/bgm_epic.mp3',         
-  BGM_WIND: '/audio/bgm_wind.mp3',         
-  BGM_WARM: '/audio/bgm_warm.mp3',         
+  BGM_GUQIN: 'audio/bgm_guqin.mp3',       
+  BGM_HEARTBEAT: 'audio/bgm_heartbeat.mp3', 
+  BGM_EPIC: 'audio/bgm_epic.mp3',         
+  BGM_WIND: 'audio/bgm_wind.mp3',         
+  BGM_WARM: 'audio/bgm_warm.mp3',         
   
   // SFX
-  SFX_BARRIER: '/audio/sfx_barrier.mp3',   
-  SFX_DOOR_BREAK: '/audio/sfx_door.mp3',   
-  SFX_SWORD: '/audio/sfx_sword.mp3',       
+  SFX_BARRIER: 'audio/sfx_barrier.mp3',   
+  SFX_DOOR_BREAK: 'audio/sfx_door.mp3',   
+  SFX_SWORD: 'audio/sfx_sword.mp3',       
 };
 
 export const ASSETS = {
-  // 背景 (确保服务器上文件夹名为 pictures)
+  // 背景
   BG_QIANCAO: 'pictures/qiancao.png', 
   BG_BAMBOO_NIGHT: 'pictures/bamboonight.png', 
   BG_COLD_SPRING: 'pictures/coldspring.png',
@@ -32,11 +50,13 @@ export const ASSETS = {
   BG_BLACK: 'pictures/black.png', 
   
   // 封面
-  START_SCREEN_PIC: './pictures/start.png',
+  START_SCREEN_PIC: 'pictures/start.png',
 
-  // 立绘 (确保文件名与实际上传的一致)
-  SHEN_QINGQIU_PIC: './shenqingqiu.png',
+  // 立绘 (文件名必须全小写，且与实际文件完全一致)
+  SHEN_QINGQIU_PIC: 'pictures/shenqingqiu.png',
   YUE_QINGYUAN_PIC: 'pictures/yueqingyuan.png',
+  
+  // 尚无资源的占位符
   MU_QINGFANG_PIC: `${PLACEHOLDER_BASE}/450x800/14b8a6/ffffff?text=Mu+Qingfang`,
   
   // 特殊 CG
@@ -275,7 +295,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       },
       {
         bgImage: ASSETS.BG_BLACK,
-        text: '衣衫尽裂，满室荒唐。这是一场名为救赎的凌迟。沈清秋在药力驱使下展现出从未见过的媚态，岳清源则在沈清秋一声声变调的“七哥”中，彻底疯魔向。',
+        text: '衣衫尽裂，满室荒唐。这是一场名为救赎的凌迟。沈清秋在药力驱使下展现出从未见过的媚态，岳清源则在沈清秋一声声变调的“七哥”中，彻底疯魔。',
         jumpToScene: 'chapter_3'
       }
     ]

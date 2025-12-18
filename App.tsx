@@ -88,7 +88,10 @@ const App: React.FC = () => {
         <img 
           src={ASSETS.START_SCREEN_PIC}
           className="absolute inset-0 w-full h-full object-cover opacity-50 contrast-110 scale-105 animate-pulse-slow"
-          onError={() => setBgError(true)}
+          onError={() => {
+            console.error(`[App] Failed to load start screen image: ${ASSETS.START_SCREEN_PIC}`);
+            setBgError(true);
+          }}
           alt="Start Screen"
         />
       ) : (
