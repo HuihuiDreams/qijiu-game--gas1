@@ -6,40 +6,40 @@ import { StoryScene, Character, CharacterPosition } from '../types';
 
 const PLACEHOLDER_BASE = 'https://placehold.co';
 
-// 音频资源 (请在项目根目录下创建 audio 文件夹，并放入对应文件)
+// 音频资源
 export const AUDIO = {
   // BGM
-  BGM_GUQIN: 'audio/bgm_guqin.mp3',       // 压抑的古琴曲
-  BGM_HEARTBEAT: 'audio/bgm_heartbeat.mp3', // 急促心跳/耳鸣
-  BGM_EPIC: 'audio/bgm_epic.mp3',         // 悲壮交响乐
-  BGM_WIND: 'audio/bgm_wind.mp3',         // 萧瑟风声/寂静
-  BGM_WARM: 'audio/bgm_warm.mp3',         // 舒缓温暖
+  BGM_GUQIN: '/audio/bgm_guqin.mp3',       
+  BGM_HEARTBEAT: '/audio/bgm_heartbeat.mp3', 
+  BGM_EPIC: '/audio/bgm_epic.mp3',         
+  BGM_WIND: '/audio/bgm_wind.mp3',         
+  BGM_WARM: '/audio/bgm_warm.mp3',         
   
   // SFX
-  SFX_BARRIER: 'audio/sfx_barrier.mp3',   // 禁制触动
-  SFX_DOOR_BREAK: 'audio/sfx_door.mp3',   // 破门
-  SFX_SWORD: 'audio/sfx_sword.mp3',       // 剑鸣
+  SFX_BARRIER: '/audio/sfx_barrier.mp3',   
+  SFX_DOOR_BREAK: '/audio/sfx_door.mp3',   
+  SFX_SWORD: '/audio/sfx_sword.mp3',       
 };
 
 export const ASSETS = {
-  // 背景 (Images in 'pictures' folder)
-  BG_QIANCAO: 'pictures/qiancao.png', 
-  BG_BAMBOO_NIGHT: 'pictures/bamboonight.png', 
-  BG_COLD_SPRING: 'pictures/coldspring.png',
-  BG_BEDROOM: 'pictures/bedroom.png', 
-  BG_RUINS: 'pictures/ruin.png', 
-  BG_CLIFF: 'pictures/cliff.png',
-  BG_BLACK: 'pictures/black.png', 
+  // 背景 (确保服务器上文件夹名为 pictures)
+  BG_QIANCAO: '/pictures/qiancao.png', 
+  BG_BAMBOO_NIGHT: '/pictures/bamboonight.png', 
+  BG_COLD_SPRING: '/pictures/coldspring.png',
+  BG_BEDROOM: '/pictures/bedroom.png', 
+  BG_RUINS: '/pictures/ruin.png', 
+  BG_CLIFF: '/pictures/cliff.png',
+  BG_BLACK: '/pictures/black.png', 
   
   // 封面
-  START_SCREEN_PIC: 'pictures/start.png',
+  START_SCREEN_PIC: '/pictures/start.png',
 
-  // 立绘 (Characters in 'pictures' folder)
-  SHEN_QINGQIU_PIC: 'pictures/shenqingqiu.png',
-  YUE_QINGYUAN_PIC: 'pictures/yueqingyuan.png',
+  // 立绘 (确保文件名与实际上传的一致)
+  SHEN_QINGQIU_PIC: '/pictures/shenqingqiu.png',
+  YUE_QINGYUAN_PIC: '/pictures/yueqingyuan.png',
   MU_QINGFANG_PIC: `${PLACEHOLDER_BASE}/450x800/14b8a6/ffffff?text=Mu+Qingfang`,
   
-  // 特殊 CG (占位符)
+  // 特殊 CG
   CG_KISS: `${PLACEHOLDER_BASE}/1920x1080/881337/ffffff?text=CG:+Reunion`, 
   CG_MEMORY: `${PLACEHOLDER_BASE}/1920x1080/fbbf24/ffffff?text=Memory:+Ling+Xi+Cave`
 };
@@ -155,7 +155,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
     lines: [
       {
         speakerId: 'yue',
-        text: '既然师弟不便，那我明日再来。清秋，若有不适，定要传音于我. (注：此处由于木清芳立绘尚未提供，保持隐藏状态)'
+        text: '既然师弟不便，那我明日再来。清秋，若有不适，定要传音于我。'
       },
       {
         text: '岳清源脚步声远去。',
@@ -254,7 +254,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       },
       {
         bgImage: ASSETS.BG_BEDROOM,
-        text: '肌肤相亲瞬间，甜腻香气彻底引引爆一切。沈清秋本能地将他当成唯一救赎，死死缠住岳清源脖颈。',
+        text: '肌肤相亲瞬间，甜腻香气彻底引爆一切。沈清秋本能地将他当成唯一救赎，死死缠住岳清源脖颈。',
         characterUpdates: [
             { characterId: 'yue', position: CharacterPosition.HIDDEN, expression: 'hidden' },
             { characterId: 'shen', position: CharacterPosition.CENTER, expression: 'shame' }
@@ -275,7 +275,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       },
       {
         bgImage: ASSETS.BG_BLACK,
-        text: '衣衫尽裂，满室荒唐。这是一场名为救赎的凌迟。沈清秋在药力驱使下展现出从未见过的媚态，岳清源则在沈清秋一声声变调的“七哥”中，彻底疯魔。',
+        text: '衣衫尽裂，满室荒唐。这是一场名为救赎的凌迟。沈清秋在药力驱使下展现出从未见过的媚态，岳清源则在沈清秋一声声变调的“七哥”中，彻底疯魔向。',
         jumpToScene: 'chapter_3'
       }
     ]
