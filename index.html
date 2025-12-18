@@ -54,8 +54,8 @@
       /* Loading animation */
       .loading-spinner {
         border: 4px solid rgba(255, 255, 255, 0.1);
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         border-left-color: #10b981;
         animation: spin 1s ease-in-out infinite;
@@ -79,42 +79,69 @@
 </script>
 </head>
   <body>
-    <div id="root" class="w-screen h-screen flex flex-col items-center justify-center space-y-4">
+    <div id="root" class="w-screen h-screen flex flex-col items-center justify-center space-y-6">
       <!-- Loading State / Fallback -->
       <div class="loading-spinner"></div>
-      <p class="text-stone-500 text-sm tracking-widest animate-pulse">正在加载资源...</p>
+      <div class="text-center space-y-2">
+         <p class="text-stone-400 text-lg font-serif tracking-widest animate-pulse">正在读取记忆...</p>
+         <p class="text-stone-600 text-xs font-mono">Loading System...</p>
+      </div>
       
       <!-- Error Display Area -->
-      <div id="error-display" class="hidden text-red-400 text-xs max-w-lg text-center p-4 bg-red-900/20 border border-red-900 rounded mt-4"></div>
+      <div id="error-display" class="hidden text-red-300 text-sm max-w-2xl text-center p-6 bg-red-950/50 border border-red-800 rounded-lg mt-8 backdrop-blur-sm shadow-xl font-mono leading-relaxed"></div>
     </div>
 
     <!-- Error Handler Script -->
     <script>
+      // Use capturing phase (true) to catch resource loading errors (like script 404s)
       window.addEventListener('error', function(event) {
         const errorDisplay = document.getElementById('error-display');
         const spinner = document.querySelector('.loading-spinner');
+        
+        // Hide spinner on error
+        if (spinner) spinner.style.borderLeftColor = '#ef4444'; // Turn red
+        
         if (errorDisplay) {
           errorDisplay.classList.remove('hidden');
-          errorDisplay.innerHTML = '<strong>加载错误:</strong><br>' + (event.message || '未知错误');
-          if (spinner) spinner.style.display = 'none';
+          
+          let msg = '';
+          // Check if it's a resource loading error (Script 404)
+          if (event.target && (event.target.tagName === 'SCRIPT' || event.target.tagName === 'LINK')) {
+             msg = `无法加载资源文件: ${event.target.src || event.target.href}<br>请检查文件名大小写是否正确 (GitHub Pages 区分大小写)。`;
+          } else {
+             msg = event.message || '未知错误';
+          }
+          
+          errorDisplay.innerHTML = `
+            <strong class="text-red-400 text-lg block mb-2">⚠ 运行错误</strong>
+            ${msg}
+          `;
         }
-      });
+      }, true); 
       
-      // Handle 404 on scripts
+      // Timeout fallback
       window.addEventListener('load', function() {
         setTimeout(function() {
-          // If React hasn't mounted after 3 seconds, show warning
           const root = document.getElementById('root');
-          if (root && root.querySelector('.loading-spinner')) {
+          // If we still see the spinner after 5 seconds, something is stuck silently
+          if (root && root.querySelector('.loading-spinner') && document.getElementById('error-display').classList.contains('hidden')) {
              const errorDisplay = document.getElementById('error-display');
              errorDisplay.classList.remove('hidden');
-             errorDisplay.innerHTML += '<br><br>如果是 404 错误，请检查文件名大小写或路径。<br>当前尝试加载: index.tsx';
+             errorDisplay.innerHTML = `
+                <strong class="text-yellow-400">⏳ 加载超时</strong><br>
+                React 尚未启动。<br>
+                1. 请按 F12 打开开发者工具查看 Console。<br>
+                2. 检查 index.tsx 是否存在于仓库根目录。<br>
+                3. 确保 importmap 配置正确。
+             `;
           }
         }, 5000);
       });
     </script>
 
-    <!-- App Entry Point: Removed ./ and added cache buster -->
-    <script type="text/babel" data-type="module" data-presets="typescript,react" src="index.tsx?v=1.2"></script>
+    <!-- App Entry Point -->
+    <!-- 1. data-type="module" is required for Babel to handle imports 
+         2. src starts with ./ to be explicit relative path -->
+    <script type="text/babel" data-type="module" data-presets="typescript,react" src="./index.tsx"></script>
   </body>
 </html>
