@@ -7,10 +7,6 @@ import { StoryScene, Character, CharacterPosition } from '../types';
 const PLACEHOLDER_BASE = 'https://placehold.co';
 
 // 音频资源 (请在项目根目录下创建 audio 文件夹，并放入对应文件)
-// 结构:
-// - index.html
-// - audio/
-//   - bgm_guqin.mp3
 export const AUDIO = {
   // BGM
   BGM_GUQIN: 'audio/bgm_guqin.mp3',       // 压抑的古琴曲
@@ -29,32 +25,30 @@ export const ASSETS = {
   // 背景 (Images in 'pictures' folder)
   BG_QIANCAO: 'pictures/qiancao.png', 
   BG_BAMBOO_NIGHT: 'pictures/bamboonight.png', 
-  
-  // 尚未替换的背景仍使用占位符
-  BG_COLD_SPRING: `${PLACEHOLDER_BASE}/1920x1080/1e3a8a/ffffff?text=Cold+Spring`,
-  BG_BEDROOM: `${PLACEHOLDER_BASE}/1920x1080/451a03/ffffff?text=Master+Bedroom`, 
-  BG_RUINS: `${PLACEHOLDER_BASE}/1920x1080/57534e/ffffff?text=Ruins+(Ash)`, 
-  BG_CLIFF: `${PLACEHOLDER_BASE}/1920x1080/78716c/ffffff?text=Cliff`,
-  BG_BLACK: `${PLACEHOLDER_BASE}/1920x1080/000000/ffffff?text=Darkness`, 
+  BG_COLD_SPRING: 'pictures/coldspring.png',
+  BG_BEDROOM: 'pictures/bedroom.png', 
+  BG_RUINS: 'pictures/ruin.png', 
+  BG_CLIFF: 'pictures/cliff.png',
+  BG_BLACK: 'pictures/black.png', 
   
   // 封面
-  START_SCREEN_PIC: `${PLACEHOLDER_BASE}/1920x1080/1c1917/ffffff?text=Cang+Qiong+Jue+Xiang`,
+  START_SCREEN_PIC: 'pictures/start.png',
 
-  // 立绘 (占位符)
-  SHEN_QINGQIU_PIC: `${PLACEHOLDER_BASE}/450x800/10b981/ffffff?text=Shen+Qingqiu`,
-  YUE_QINGYUAN_PIC: `${PLACEHOLDER_BASE}/450x800/818cf8/ffffff?text=Yue+Qingyuan`,
+  // 立绘 (Characters in 'pictures' folder)
+  SHEN_QINGQIU_PIC: 'pictures/shenqingqiu.png',
+  YUE_QINGYUAN_PIC: 'pictures/yueqingyuan.png',
   MU_QINGFANG_PIC: `${PLACEHOLDER_BASE}/450x800/14b8a6/ffffff?text=Mu+Qingfang`,
   
-  // 特殊
+  // 特殊 CG (占位符)
   CG_KISS: `${PLACEHOLDER_BASE}/1920x1080/881337/ffffff?text=CG:+Reunion`, 
   CG_MEMORY: `${PLACEHOLDER_BASE}/1920x1080/fbbf24/ffffff?text=Memory:+Ling+Xi+Cave`
 };
 
 // --- 1. 定义角色 ---
 export const CHARACTERS: Record<string, Character> = {
-  shen: { id: 'shen', name: '沈清秋', color: '#10b981' }, // Emerald
-  yue: { id: 'yue', name: '岳清源', color: '#818cf8' },  // Indigo
-  mu: { id: 'mu', name: '木清芳', color: '#2dd4bf' },    // Teal
+  shen: { id: 'shen', name: '沈清秋', color: '#10b981' }, 
+  yue: { id: 'yue', name: '岳清源', color: '#818cf8' },  
+  mu: { id: 'mu', name: '木清芳', color: '#2dd4bf' },    
   system: { id: 'system', name: '系统/旁白', color: '#f43f5e' } 
 };
 
@@ -68,9 +62,6 @@ export const getCharacterImage = (charId: string, expression: string = 'neutral'
 
 // --- 3. 剧情脚本 ---
 export const STORY_SCENES: Record<string, StoryScene> = {
-  // ==========================================
-  // Chapter 1: 药与火
-  // ==========================================
   'start': {
     id: 'start',
     lines: [
@@ -78,7 +69,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
         bgImage: ASSETS.BG_QIANCAO,
         text: '【Chapter 1: 药与火】',
         speakerId: 'system',
-        bgm: AUDIO.BGM_GUQIN // BGM: 压抑的古琴曲
+        bgm: AUDIO.BGM_GUQIN
       },
       {
         speakerId: 'shen',
@@ -118,7 +109,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
         characterUpdates: [
           { characterId: 'shen', position: CharacterPosition.CENTER, expression: 'neutral' }
         ],
-        bgm: AUDIO.BGM_HEARTBEAT // BGM: 逐渐急促的心跳声
+        bgm: AUDIO.BGM_HEARTBEAT
       },
       {
         speakerId: 'shen',
@@ -138,7 +129,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       },
       {
         text: '（门外禁制被触动）',
-        soundEffect: AUDIO.SFX_BARRIER // SE: 禁制被触动
+        soundEffect: AUDIO.SFX_BARRIER
       },
       {
         speakerId: 'yue',
@@ -159,14 +150,12 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       }
     ]
   },
-
-  // --- Bad End 1 Branch ---
   'bad_end_1': {
     id: 'bad_end_1',
     lines: [
       {
         speakerId: 'yue',
-        text: '既然师弟不便，那我明日再来。清秋，若有不适，定要传音于我。'
+        text: '既然师弟不便，那我明日再来。清秋，若有不适，定要传音于我. (注：此处由于木清芳立绘尚未提供，保持隐藏状态)'
       },
       {
         text: '岳清源脚步声远去。',
@@ -180,12 +169,10 @@ export const STORY_SCENES: Record<string, StoryScene> = {
         bgImage: ASSETS.BG_BLACK,
         text: '【Bad End 1: 枯骨】那一夜无人知晓发生了什么。次日清晨，弟子发现沈峰主七窍流血，经脉寸断，死于走火入魔。岳清源抱着那具冰冷的尸体，在竹舍前坐了整整三天三夜，最终心魔深种，苍穹山派从此再无宁日。',
         choices: [],
-        bgm: AUDIO.BGM_WIND // Sad ending
+        bgm: AUDIO.BGM_WIND
       }
     ]
   },
-
-  // --- Break In Continuation (True Route Path) ---
   'start_break_in': {
     id: 'start_break_in',
     lines: [
@@ -195,7 +182,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
             { characterId: 'shen', position: CharacterPosition.LEFT, expression: 'shame' },
             { characterId: 'yue', position: CharacterPosition.RIGHT, expression: 'shocked' }
         ],
-        soundEffect: AUDIO.SFX_DOOR_BREAK // SE: 破门
+        soundEffect: AUDIO.SFX_DOOR_BREAK
       },
       {
         speakerId: 'yue',
@@ -210,10 +197,6 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       }
     ]
   },
-
-  // ==========================================
-  // Chapter 2: 生死抉择
-  // ==========================================
   'chapter_2': {
     id: 'chapter_2',
     lines: [
@@ -221,7 +204,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
         bgImage: ASSETS.BG_COLD_SPRING,
         text: '【Chapter 2: 生死抉择】',
         speakerId: 'system',
-        bgm: AUDIO.BGM_EPIC // BGM: 悲壮、紧张
+        bgm: AUDIO.BGM_EPIC
       },
       {
         text: '寒潭冷泉。岳清源抱着沈清秋跳入池中，试图帮他化解药性。然而一炷香过去，沈清秋体内热度未退，反因外界极寒刺激，逼得药性疯狂反扑。',
@@ -255,16 +238,12 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       }
     ]
   },
-
-  // --- BE: 阴阳两隔 ---
   'be_separation': {
     id: 'be_separation',
     lines: [
       { bgImage: ASSETS.BG_BLACK, text: '【Bad End: 阴阳两隔】岳清源选择了克制，却眼睁睁看着沈清秋在怀中爆体而亡。', bgm: AUDIO.BGM_WIND }
     ]
   },
-
-  // --- True Route ---
   'chapter_2_save': {
     id: 'chapter_2_save',
     lines: [
@@ -275,7 +254,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       },
       {
         bgImage: ASSETS.BG_BEDROOM,
-        text: '肌肤相亲瞬间，甜腻香气彻底引爆一切。沈清秋本能地将他当成唯一救赎，死死缠住岳清源脖颈。',
+        text: '肌肤相亲瞬间，甜腻香气彻底引引爆一切。沈清秋本能地将他当成唯一救赎，死死缠住岳清源脖颈。',
         characterUpdates: [
             { characterId: 'yue', position: CharacterPosition.HIDDEN, expression: 'hidden' },
             { characterId: 'shen', position: CharacterPosition.CENTER, expression: 'shame' }
@@ -301,10 +280,6 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       }
     ]
   },
-
-  // ==========================================
-  // Chapter 3: 逃离与雷霆
-  // ==========================================
   'chapter_3': {
     id: 'chapter_3',
     lines: [
@@ -312,7 +287,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
         bgImage: ASSETS.BG_BEDROOM,
         text: '【Chapter 3: 逃离与雷霆】',
         speakerId: 'system',
-        bgm: AUDIO.BGM_WIND // BGM: 寂静/风声
+        bgm: AUDIO.BGM_WIND
       },
       {
         text: '翌日清晨。寝殿一片狼藉。沈清秋在一阵酸痛中醒来，记忆如潮水回笼。',
@@ -351,7 +326,6 @@ export const STORY_SCENES: Record<string, StoryScene> = {
         bgImage: ASSETS.BG_QIANCAO,
         speakerId: 'mu',
         text: '（脸色煞白）掌……掌门师兄？这……主料没问题，但辅料“龙涎草”被换成了“合欢千叶红”！这是合欢宗流出的劣质催情辅料……是安定峰采购的。',
-        // Mu Off-screen or On-screen, text implies he is talking to Yue
         characterUpdates: [
            { characterId: 'yue', position: CharacterPosition.LEFT, expression: 'dark' },
            { characterId: 'mu', position: CharacterPosition.RIGHT, expression: 'neutral' } 
@@ -380,10 +354,6 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       }
     ]
   },
-
-  // ==========================================
-  // Chapter 4: 废墟对峙
-  // ==========================================
   'chapter_4': {
     id: 'chapter_4',
     lines: [
@@ -439,16 +409,12 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       }
     ]
   },
-
-  // --- BE: 陌路 ---
   'be_stranger': {
     id: 'be_stranger',
     lines: [
       { bgImage: ASSETS.BG_BLACK, text: '【Bad End: 陌路】沈清秋最终放下了剑，也放下了这段纠缠半生的孽缘，从此消失于江湖，与岳清源死生不复相见。', bgm: AUDIO.BGM_WIND }
     ]
   },
-
-  // --- True Route: 真相 ---
   'chapter_4_truth': {
     id: 'chapter_4_truth',
     lines: [
@@ -460,7 +426,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       {
         text: '嗡——！！！凄厉的剑鸣。血色灵光炸裂，进入记忆闪回。',
         bgImage: ASSETS.CG_MEMORY,
-        soundEffect: AUDIO.SFX_SWORD // SE: 剑鸣
+        soundEffect: AUDIO.SFX_SWORD
       },
       {
         text: '剑锋即将贯穿胸膛的刹那，岳清源腰间玄肃剑骤然发出一声凄厉悲鸣！那非护主剑气，而是灵魂深处的共鸣与哀嚎。沈清秋的神识被强行拽入一片混沌的记忆之海。',
@@ -494,7 +460,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       {
         speakerId: 'shen',
         text: '（跌撞上前，死死扣住他的腰背，泪水汹涌）七哥……',
-        expression: 'shocked' // Crying implied by text, using close emotion
+        expression: 'shocked'
       },
       {
         speakerId: 'yue',
@@ -504,10 +470,6 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       }
     ]
   },
-
-  // ==========================================
-  // Chapter 5: 尾声 - 归途
-  // ==========================================
   'chapter_5': {
     id: 'chapter_5',
     lines: [
@@ -515,7 +477,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
         bgImage: ASSETS.BG_BEDROOM,
         text: '【Chapter 5: 尾声 - 归途】',
         speakerId: 'system',
-        bgm: AUDIO.BGM_WARM // BGM: 舒缓温暖
+        bgm: AUDIO.BGM_WARM
       },
       {
         text: '尘埃落定。尚清华被废去修为打入水牢。苍穹山夜色重归宁静。掌门寝殿，仍是那张床榻，气氛却截然不同。沈清秋体内余毒沉积，需靠双修化解。',
@@ -529,7 +491,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
         text: '（手指轻抚他的眉眼）小九，可能会有点疼，忍一忍。',
         characterUpdates: [
            { characterId: 'yue', position: CharacterPosition.RIGHT, expression: 'gentle' },
-           { characterId: 'shen', position: CharacterPosition.LEFT, expression: 'soft' } // soft expression added
+           { characterId: 'shen', position: CharacterPosition.LEFT, expression: 'soft' }
         ]
       },
       {
@@ -539,7 +501,7 @@ export const STORY_SCENES: Record<string, StoryScene> = {
       },
       {
         bgImage: ASSETS.CG_KISS,
-        text: '沈清秋仰起头，笨拙而坚定地吻上岳清源。', // Description from CG Illustration line
+        text: '沈清秋仰起头，笨拙而坚定地吻上岳清源。',
         characterUpdates: [
            { characterId: 'yue', position: CharacterPosition.HIDDEN, expression: 'hidden' },
            { characterId: 'shen', position: CharacterPosition.HIDDEN, expression: 'hidden' }
